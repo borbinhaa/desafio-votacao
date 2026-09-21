@@ -1,0 +1,13 @@
+# Requests de teste manual (VS Code REST Client / IntelliJ HTTP Client).
+# Suba a aplicação com `mvn spring-boot:run` e execute cada bloco com "Send Request".
+
+@baseUrl = http://localhost:8080
+
+### Health check
+GET {{baseUrl}}/actuator/health
+
+### OpenAPI (JSON)
+GET {{baseUrl}}/v3/api-docs
+
+### Swagger UI (abrir no navegador)
+GET {{baseUrl}}/swagger-ui.html

@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: voting-api
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NAME:voting}
+    username: ${DB_USER:voting}
+    password: ${DB_PASSWORD:voting}
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+
+  flyway:
+    enabled: true
+
+  docker:
+    compose:
+      # Starts the "db" service from docker-compose.yml on `mvn spring-boot:run`.
+      # Ignored when the app runs inside Docker or in tests.
+      enabled: ${DOCKER_COMPOSE_ENABLED:true}
+      lifecycle-management: start-only
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    com.gabrieldeborba.voting: INFO
