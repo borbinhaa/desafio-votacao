@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @WebMvcTest(controllers = GlobalExceptionHandlerTest.ThrowingController.class)
@@ -60,6 +62,16 @@ class GlobalExceptionHandlerTest {
                 .andExpect(jsonPath("$.errors[0].field").value("name"))
                 .andExpect(jsonPath("$.errors[0].message").value("must not be blank"))
                 .andExpect(jsonPath("$.timestamp").exists());
+    }
+
+    @Test
+    void invalidQueryParameterReturns400WithFieldErrors() throws Exception {
+        mockMvc.perform(get("/test/params").param("size", "500"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentTypeCompatibleWith(PROBLEM_JSON))
+                .andExpect(jsonPath("$.detail").value("Validation failed"))
+                .andExpect(jsonPath("$.errors[0].field").value("size"))
+                .andExpect(jsonPath("$.errors[0].message").value("must be less than or equal to 100"));
     }
 
     @Test
@@ -114,6 +126,9 @@ class GlobalExceptionHandlerTest {
 
         @PostMapping("/validate")
         void validate(@Valid @RequestBody Payload payload) {}
+
+        @GetMapping("/params")
+        void params(@RequestParam @Max(100) int size) {}
     }
 
     static class ConflictException extends DomainException {

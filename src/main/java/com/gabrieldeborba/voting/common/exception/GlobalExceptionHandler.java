@@ -15,6 +15,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -24,7 +25,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  *
  * <ul>
  *   <li>{@link DomainException} → the status carried by the exception (404, 409, 422...)
- *   <li>Bean validation failures → 400 with an {@code errors} list of field/message pairs
+ *   <li>Bean validation failures (body fields or query/path parameters) → 400 with an {@code errors}
+ *       list of field/message pairs
  *   <li>Unreadable JSON (malformed body, unknown enum value) → 400
  *   <li>Unknown route → 404 with the method and path in the detail
  *   <li>Other framework exceptions (wrong method, wrong media type) → handled by
@@ -62,6 +64,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             WebRequest request) {
         List<ValidationError> errors = ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> new ValidationError(error.getField(), error.getDefaultMessage()))
+                .toList();
+        ProblemDetail problem = problem(HttpStatus.BAD_REQUEST, "Validation failed");
+        problem.setProperty("errors", errors);
+        return handleExceptionInternal(ex, problem, headers, HttpStatus.BAD_REQUEST, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHandlerMethodValidationException(
+            HandlerMethodValidationException ex,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
+        List<ValidationError> errors = ex.getParameterValidationResults().stream()
+                .flatMap(result -> result.getResolvableErrors().stream()
+                        .map(error -> new ValidationError(
+                                result.getMethodParameter().getParameterName(), error.getDefaultMessage())))
                 .toList();
         ProblemDetail problem = problem(HttpStatus.BAD_REQUEST, "Validation failed");
         problem.setProperty("errors", errors);

@@ -17,3 +17,40 @@ GET {{baseUrl}}/api/v1/nothing
 
 ### Método não suportado -> 405 problem+json
 DELETE {{baseUrl}}/actuator/health
+
+### [Passo 3] Criar pauta -> 201 + Location
+# @name createAgenda
+POST {{baseUrl}}/api/v1/agendas
+Content-Type: application/json
+
+{
+  "title": "Aprovar orçamento 2026",
+  "description": "Orçamento anual da cooperativa"
+}
+
+### [Passo 3] Criar pauta sem título -> 400 com errors[]
+POST {{baseUrl}}/api/v1/agendas
+Content-Type: application/json
+
+{
+  "title": "   "
+}
+
+### [Passo 3] Buscar pauta por id -> 200 (usa o id retornado pelo createAgenda)
+@agendaId = {{createAgenda.response.body.id}}
+GET {{baseUrl}}/api/v1/agendas/{{agendaId}}
+
+### [Passo 3] Pauta inexistente -> 404
+GET {{baseUrl}}/api/v1/agendas/00000000-0000-0000-0000-000000000000
+
+### [Passo 3] Id inválido -> 400
+GET {{baseUrl}}/api/v1/agendas/not-a-uuid
+
+### [Passo 3] Listar pautas (paginado, mais recentes primeiro)
+GET {{baseUrl}}/api/v1/agendas?page=0&size=10
+
+### [Passo 3] size acima do limite (100) -> 400 com errors[]
+GET {{baseUrl}}/api/v1/agendas?page=0&size=1000000
+
+### [Passo 3] page negativa -> 400
+GET {{baseUrl}}/api/v1/agendas?page=-1&size=10
