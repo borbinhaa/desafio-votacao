@@ -15,6 +15,12 @@ public abstract class DomainException extends RuntimeException {
         this.status = status;
     }
 
+    /** Use when translating a lower-level failure (e.g. a constraint violation) so the log keeps the cause. */
+    protected DomainException(HttpStatus status, String message, Throwable cause) {
+        super(message, cause);
+        this.status = status;
+    }
+
     public HttpStatus getStatus() {
         return status;
     }

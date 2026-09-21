@@ -31,3 +31,6 @@ management:
 logging:
   level:
     com.gabrieldeborba.voting: INFO
+    # Unique-constraint violations are an expected business outcome (duplicate session/vote) and are
+    # already reported by GlobalExceptionHandler; keep Hibernate from logging the raw SQL error at WARN.
+    org.hibernate.orm.jdbc.error: ERROR

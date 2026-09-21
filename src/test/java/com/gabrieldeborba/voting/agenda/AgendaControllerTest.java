@@ -74,7 +74,9 @@ class AgendaControllerTest {
     void findByIdRejectsMalformedUuid() throws Exception {
         mockMvc.perform(get("/api/v1/agendas/not-a-uuid"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(400));
+                .andExpect(jsonPath("$.detail").value("Validation failed"))
+                .andExpect(jsonPath("$.errors[0].field").value("id"))
+                .andExpect(jsonPath("$.errors[0].message").value("must be a valid UUID"));
     }
 
     @Test
@@ -109,7 +111,8 @@ class AgendaControllerTest {
     void findAllRejectsInvalidPagingParameters(String page, String size, String field) throws Exception {
         mockMvc.perform(get("/api/v1/agendas").param("page", page).param("size", size))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(400));
+                .andExpect(jsonPath("$.detail").value("Validation failed"))
+                .andExpect(jsonPath("$.errors[0].field").value(field));
 
         verify(service, never()).findAll(anyInt(), anyInt());
     }

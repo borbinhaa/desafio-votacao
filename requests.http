@@ -54,3 +54,28 @@ GET {{baseUrl}}/api/v1/agendas?page=0&size=1000000
 
 ### [Passo 3] page negativa -> 400
 GET {{baseUrl}}/api/v1/agendas?page=-1&size=10
+
+### [Passo 4] Abrir sessão com duração informada -> 201
+POST {{baseUrl}}/api/v1/agendas/{{agendaId}}/session
+Content-Type: application/json
+
+{
+  "durationMinutes": 5
+}
+
+### [Passo 4] Abrir sessão sem body (default 1 minuto) -> 201 na primeira vez, 409 se já existir
+POST {{baseUrl}}/api/v1/agendas/{{agendaId}}/session
+
+### [Passo 4] Duração inválida -> 400 com errors[]
+POST {{baseUrl}}/api/v1/agendas/{{agendaId}}/session
+Content-Type: application/json
+
+{
+  "durationMinutes": 0
+}
+
+### [Passo 4] Consultar sessão (status OPEN/CLOSED derivado do horário) -> 200
+GET {{baseUrl}}/api/v1/agendas/{{agendaId}}/session
+
+### [Passo 4] Sessão de pauta inexistente -> 404
+GET {{baseUrl}}/api/v1/agendas/00000000-0000-0000-0000-000000000000/session
