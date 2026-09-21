@@ -11,3 +11,9 @@ GET {{baseUrl}}/v3/api-docs
 
 ### Swagger UI (abrir no navegador)
 GET {{baseUrl}}/swagger-ui.html
+
+### Rota inexistente -> 404 application/problem+json
+GET {{baseUrl}}/api/v1/nothing
+
+### Método não suportado -> 405 problem+json
+DELETE {{baseUrl}}/actuator/health
