@@ -20,4 +20,24 @@ class ApplicationIT extends AbstractIntegrationTest {
                 .jsonPath("$.status")
                 .isEqualTo("UP");
     }
+
+    @Test
+    void openApiDocumentDescribesTheV1Endpoints() {
+        client.get()
+                .uri("/v3/api-docs")
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody()
+                .jsonPath("$.info.title")
+                .isEqualTo("Voting API")
+                .jsonPath("$.info.version")
+                .isEqualTo("v1")
+                .jsonPath("$.paths['/api/v1/agendas'].post.responses['201']")
+                .exists()
+                .jsonPath("$.paths['/api/v1/agendas/{agendaId}/votes'].post.responses['422']")
+                .exists()
+                .jsonPath("$.paths['/api/v1/agendas/{agendaId}/result'].get")
+                .exists();
+    }
 }
