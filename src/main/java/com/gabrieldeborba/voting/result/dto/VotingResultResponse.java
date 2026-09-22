@@ -1,6 +1,8 @@
-package com.gabrieldeborba.voting.vote;
+package com.gabrieldeborba.voting.result.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.gabrieldeborba.voting.result.VotingOutcome;
+import com.gabrieldeborba.voting.result.VotingStatus;
 import java.util.UUID;
 import org.jspecify.annotations.Nullable;
 

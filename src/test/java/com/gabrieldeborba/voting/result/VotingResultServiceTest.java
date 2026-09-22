@@ -1,14 +1,18 @@
-package com.gabrieldeborba.voting.vote;
+package com.gabrieldeborba.voting.result;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 import com.gabrieldeborba.voting.agenda.Agenda;
-import com.gabrieldeborba.voting.agenda.AgendaNotFoundException;
 import com.gabrieldeborba.voting.agenda.AgendaService;
+import com.gabrieldeborba.voting.agenda.exception.AgendaNotFoundException;
+import com.gabrieldeborba.voting.result.dto.VotingResultResponse;
 import com.gabrieldeborba.voting.session.VotingSession;
 import com.gabrieldeborba.voting.session.VotingSessionRepository;
+import com.gabrieldeborba.voting.vote.VoteChoice;
+import com.gabrieldeborba.voting.vote.VoteCount;
+import com.gabrieldeborba.voting.vote.VoteRepository;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;

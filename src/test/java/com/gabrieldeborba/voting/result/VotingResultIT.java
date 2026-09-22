@@ -1,4 +1,4 @@
-package com.gabrieldeborba.voting.vote;
+package com.gabrieldeborba.voting.result;
 
 import com.gabrieldeborba.voting.AbstractIntegrationTest;
 import com.gabrieldeborba.voting.agenda.Agenda;

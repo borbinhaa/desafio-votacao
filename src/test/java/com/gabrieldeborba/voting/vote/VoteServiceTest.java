@@ -9,10 +9,15 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.gabrieldeborba.voting.agenda.Agenda;
-import com.gabrieldeborba.voting.agenda.AgendaNotFoundException;
 import com.gabrieldeborba.voting.agenda.AgendaService;
+import com.gabrieldeborba.voting.agenda.exception.AgendaNotFoundException;
 import com.gabrieldeborba.voting.session.VotingSession;
 import com.gabrieldeborba.voting.session.VotingSessionRepository;
+import com.gabrieldeborba.voting.vote.dto.VoteRequest;
+import com.gabrieldeborba.voting.vote.dto.VoteResponse;
+import com.gabrieldeborba.voting.vote.exception.MemberAlreadyVotedException;
+import com.gabrieldeborba.voting.vote.exception.VotingSessionClosedException;
+import com.gabrieldeborba.voting.vote.exception.VotingSessionNotOpenException;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;

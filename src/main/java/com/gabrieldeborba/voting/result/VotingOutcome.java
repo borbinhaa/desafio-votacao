@@ -1,4 +1,4 @@
-package com.gabrieldeborba.voting.vote;
+package com.gabrieldeborba.voting.result;
 
 public enum VotingOutcome {
     APPROVED,

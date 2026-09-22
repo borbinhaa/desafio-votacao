@@ -10,6 +10,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.gabrieldeborba.voting.agenda.Agenda;
+import com.gabrieldeborba.voting.session.dto.OpenVotingSessionRequest;
+import com.gabrieldeborba.voting.session.dto.VotingSessionResponse;
+import com.gabrieldeborba.voting.session.exception.VotingSessionAlreadyOpenException;
+import com.gabrieldeborba.voting.session.exception.VotingSessionNotFoundException;
 import java.time.Instant;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;

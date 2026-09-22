@@ -1,4 +1,4 @@
-package com.gabrieldeborba.voting.session;
+package com.gabrieldeborba.voting.session.exception;
 
 import com.gabrieldeborba.voting.common.exception.DomainException;
 import java.util.UUID;

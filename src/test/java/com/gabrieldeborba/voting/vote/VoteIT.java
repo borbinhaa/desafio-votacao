@@ -7,6 +7,7 @@ import com.gabrieldeborba.voting.agenda.Agenda;
 import com.gabrieldeborba.voting.agenda.AgendaRepository;
 import com.gabrieldeborba.voting.session.VotingSession;
 import com.gabrieldeborba.voting.session.VotingSessionRepository;
+import com.gabrieldeborba.voting.vote.dto.VoteResponse;
 import java.time.Instant;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;

@@ -2,7 +2,6 @@ package com.gabrieldeborba.voting.agenda;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -12,6 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.gabrieldeborba.voting.agenda.dto.AgendaResponse;
+import com.gabrieldeborba.voting.agenda.exception.AgendaNotFoundException;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;

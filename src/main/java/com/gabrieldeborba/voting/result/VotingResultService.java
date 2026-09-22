@@ -1,11 +1,13 @@
-package com.gabrieldeborba.voting.vote;
+package com.gabrieldeborba.voting.result;
 
 import com.gabrieldeborba.voting.agenda.Agenda;
 import com.gabrieldeborba.voting.agenda.AgendaService;
+import com.gabrieldeborba.voting.result.dto.VotingResultResponse;
 import com.gabrieldeborba.voting.session.VotingSession;
 import com.gabrieldeborba.voting.session.VotingSessionRepository;
+import com.gabrieldeborba.voting.vote.VoteCount;
+import com.gabrieldeborba.voting.vote.VoteRepository;
 import java.time.Clock;
-import java.util.Optional;
 import java.util.UUID;
 import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;

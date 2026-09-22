@@ -1,4 +1,4 @@
-package com.gabrieldeborba.voting.session;
+package com.gabrieldeborba.voting.session.exception;
 
 import com.gabrieldeborba.voting.common.exception.ResourceNotFoundException;
 import java.util.UUID;

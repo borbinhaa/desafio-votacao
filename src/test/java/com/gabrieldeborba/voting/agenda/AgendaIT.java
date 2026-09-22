@@ -3,6 +3,7 @@ package com.gabrieldeborba.voting.agenda;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.gabrieldeborba.voting.AbstractIntegrationTest;
+import com.gabrieldeborba.voting.agenda.dto.AgendaResponse;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

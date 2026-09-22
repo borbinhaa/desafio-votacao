@@ -2,6 +2,10 @@ package com.gabrieldeborba.voting.session;
 
 import com.gabrieldeborba.voting.agenda.Agenda;
 import com.gabrieldeborba.voting.agenda.AgendaService;
+import com.gabrieldeborba.voting.session.dto.OpenVotingSessionRequest;
+import com.gabrieldeborba.voting.session.dto.VotingSessionResponse;
+import com.gabrieldeborba.voting.session.exception.VotingSessionAlreadyOpenException;
+import com.gabrieldeborba.voting.session.exception.VotingSessionNotFoundException;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;

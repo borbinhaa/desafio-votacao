@@ -1,6 +1,8 @@
 package com.gabrieldeborba.voting.session;
 
 import com.gabrieldeborba.voting.config.ApiVersion;
+import com.gabrieldeborba.voting.session.dto.OpenVotingSessionRequest;
+import com.gabrieldeborba.voting.session.dto.VotingSessionResponse;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import org.jspecify.annotations.Nullable;

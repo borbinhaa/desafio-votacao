@@ -7,8 +7,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.gabrieldeborba.voting.agenda.Agenda;
-import com.gabrieldeborba.voting.agenda.AgendaNotFoundException;
 import com.gabrieldeborba.voting.agenda.AgendaService;
+import com.gabrieldeborba.voting.agenda.exception.AgendaNotFoundException;
+import com.gabrieldeborba.voting.session.dto.OpenVotingSessionRequest;
+import com.gabrieldeborba.voting.session.dto.VotingSessionResponse;
+import com.gabrieldeborba.voting.session.exception.VotingSessionAlreadyOpenException;
+import com.gabrieldeborba.voting.session.exception.VotingSessionNotFoundException;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;

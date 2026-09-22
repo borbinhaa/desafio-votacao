@@ -1,4 +1,4 @@
-package com.gabrieldeborba.voting.session;
+package com.gabrieldeborba.voting.session.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

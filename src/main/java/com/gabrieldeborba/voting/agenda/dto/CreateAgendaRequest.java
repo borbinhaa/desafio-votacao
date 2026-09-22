@@ -1,4 +1,4 @@
-package com.gabrieldeborba.voting.agenda;
+package com.gabrieldeborba.voting.agenda.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

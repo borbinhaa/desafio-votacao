@@ -1,5 +1,6 @@
-package com.gabrieldeborba.voting.vote;
+package com.gabrieldeborba.voting.vote.dto;
 
+import com.gabrieldeborba.voting.vote.VoteChoice;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 

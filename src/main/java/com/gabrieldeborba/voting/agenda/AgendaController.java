@@ -1,5 +1,7 @@
 package com.gabrieldeborba.voting.agenda;
 
+import com.gabrieldeborba.voting.agenda.dto.AgendaResponse;
+import com.gabrieldeborba.voting.agenda.dto.CreateAgendaRequest;
 import com.gabrieldeborba.voting.config.ApiVersion;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
