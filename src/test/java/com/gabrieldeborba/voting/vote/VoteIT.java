@@ -86,6 +86,22 @@ class VoteIT extends AbstractIntegrationTest {
     }
 
     @Test
+    void rejectsCpfWithWrongCheckDigits() {
+        UUID agendaId = agendaWithSession(Instant.now().plusSeconds(600));
+
+        client.post()
+                .uri("/api/v1/agendas/{id}/votes", agendaId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body("{\"cpf\":\"11111111111\",\"choice\":\"YES\"}")
+                .exchange()
+                .expectStatus()
+                .isNotFound()
+                .expectBody()
+                .jsonPath("$.detail")
+                .isEqualTo("CPF is invalid");
+    }
+
+    @Test
     void rejectsVoteAfterSessionClosed() {
         UUID agendaId = agendaWithSession(Instant.now().minusSeconds(1));
 

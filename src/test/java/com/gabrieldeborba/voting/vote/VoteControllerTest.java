@@ -11,7 +11,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.gabrieldeborba.voting.vote.dto.VoteRequest;
 import com.gabrieldeborba.voting.vote.dto.VoteResponse;
+import com.gabrieldeborba.voting.common.cpf.exception.InvalidCpfException;
 import com.gabrieldeborba.voting.vote.exception.MemberAlreadyVotedException;
+import com.gabrieldeborba.voting.vote.exception.MemberUnableToVoteException;
 import com.gabrieldeborba.voting.vote.exception.VotingSessionClosedException;
 import java.time.Instant;
 import java.util.UUID;
@@ -95,6 +97,28 @@ class VoteControllerTest {
                         .content("{\"cpf\":\"12345678909\",\"choice\":\"YES\"}"))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.detail").value("Member has already voted on agenda " + AGENDA_ID));
+    }
+
+    @Test
+    void castVoteReturns422WhenMemberIsUnableToVote() throws Exception {
+        when(service.castVote(eq(AGENDA_ID), any())).thenThrow(new MemberUnableToVoteException());
+
+        mockMvc.perform(post("/api/v1/agendas/{id}/votes", AGENDA_ID)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"cpf\":\"12345678909\",\"choice\":\"YES\"}"))
+                .andExpect(status().isUnprocessableContent())
+                .andExpect(jsonPath("$.detail").value("Member is not allowed to vote"));
+    }
+
+    @Test
+    void castVoteReturns404WhenCpfIsInvalid() throws Exception {
+        when(service.castVote(eq(AGENDA_ID), any())).thenThrow(new InvalidCpfException());
+
+        mockMvc.perform(post("/api/v1/agendas/{id}/votes", AGENDA_ID)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"cpf\":\"11111111111\",\"choice\":\"YES\"}"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.detail").value("CPF is invalid"));
     }
 
     @Test

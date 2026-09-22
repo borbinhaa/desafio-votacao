@@ -1,11 +1,14 @@
 package com.gabrieldeborba.voting.vote;
 
 import com.gabrieldeborba.voting.agenda.AgendaService;
+import com.gabrieldeborba.voting.common.cpf.CpfValidationClient;
+import com.gabrieldeborba.voting.common.cpf.CpfValidationStatus;
 import com.gabrieldeborba.voting.session.VotingSession;
 import com.gabrieldeborba.voting.session.VotingSessionRepository;
 import com.gabrieldeborba.voting.vote.dto.VoteRequest;
 import com.gabrieldeborba.voting.vote.dto.VoteResponse;
 import com.gabrieldeborba.voting.vote.exception.MemberAlreadyVotedException;
+import com.gabrieldeborba.voting.vote.exception.MemberUnableToVoteException;
 import com.gabrieldeborba.voting.vote.exception.VotingSessionClosedException;
 import com.gabrieldeborba.voting.vote.exception.VotingSessionNotOpenException;
 import java.time.Clock;
@@ -26,16 +29,19 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final VotingSessionRepository sessionRepository;
     private final AgendaService agendaService;
+    private final CpfValidationClient cpfValidationClient;
     private final Clock clock;
 
     public VoteService(
             VoteRepository voteRepository,
             VotingSessionRepository sessionRepository,
             AgendaService agendaService,
+            CpfValidationClient cpfValidationClient,
             Clock clock) {
         this.voteRepository = voteRepository;
         this.sessionRepository = sessionRepository;
         this.agendaService = agendaService;
+        this.cpfValidationClient = cpfValidationClient;
         this.clock = clock;
     }
 
@@ -43,7 +49,8 @@ public class VoteService {
      * Registers a vote. Happy path costs one select (the session) and one insert; the agenda is only
      * looked up when there is no session, to tell 404 (no agenda) from 422 (agenda without session).
      * Duplicate votes are detected by the unique constraint, not by a prior query, so concurrent
-     * requests from the same member cannot both succeed.
+     * requests from the same member cannot both succeed. The external CPF check runs only once the
+     * session is known to be open, so no call is wasted on a vote that could never be accepted.
      */
     @Transactional
     public VoteResponse castVote(UUID agendaId, VoteRequest request) {
@@ -55,6 +62,10 @@ public class VoteService {
         Instant now = clock.instant();
         if (!session.get().isOpen(now)) {
             throw new VotingSessionClosedException(agendaId, session.get().getClosesAt());
+        }
+
+        if (cpfValidationClient.validate(request.cpf()) == CpfValidationStatus.UNABLE_TO_VOTE) {
+            throw new MemberUnableToVoteException();
         }
 
         Vote vote;

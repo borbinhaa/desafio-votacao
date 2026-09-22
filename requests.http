@@ -121,7 +121,7 @@ POST {{baseUrl}}/api/v1/agendas/{{agendaId}}/votes
 Content-Type: application/json
 
 {
-  "cpf": "11122233344",
+  "cpf": "11122233396",
   "choice": "MAYBE"
 }
 
@@ -139,7 +139,7 @@ POST {{baseUrl}}/api/v1/agendas/{{createAgendaNoSession.response.body.id}}/votes
 Content-Type: application/json
 
 {
-  "cpf": "11122233344",
+  "cpf": "11122233396",
   "choice": "YES"
 }
 
@@ -148,7 +148,7 @@ POST {{baseUrl}}/api/v1/agendas/00000000-0000-0000-0000-000000000000/votes
 Content-Type: application/json
 
 {
-  "cpf": "11122233344",
+  "cpf": "11122233396",
   "choice": "YES"
 }
 
@@ -160,3 +160,21 @@ GET {{baseUrl}}/api/v1/agendas/{{createAgendaNoSession.response.body.id}}/result
 
 ### [Passo 6] Resultado de pauta inexistente -> 404
 GET {{baseUrl}}/api/v1/agendas/00000000-0000-0000-0000-000000000000/result
+
+### [Passo 7] CPF com dígito verificador errado -> 404 "CPF is invalid"
+POST {{baseUrl}}/api/v1/agendas/{{agendaId}}/votes
+Content-Type: application/json
+
+{
+  "cpf": "11111111111",
+  "choice": "YES"
+}
+
+### [Passo 7] CPF válido -> 201 ou 422 "Member is not allowed to vote" (sorteio do client fake)
+POST {{baseUrl}}/api/v1/agendas/{{agendaId}}/votes
+Content-Type: application/json
+
+{
+  "cpf": "52998224725",
+  "choice": "NO"
+}

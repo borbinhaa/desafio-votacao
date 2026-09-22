@@ -11,5 +11,5 @@ import org.springframework.context.annotation.Import;
  */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureRestTestClient
-@Import(TestcontainersConfiguration.class)
+@Import({TestcontainersConfiguration.class, AlwaysAbleCpfClientConfiguration.class})
 public abstract class AbstractIntegrationTest {}

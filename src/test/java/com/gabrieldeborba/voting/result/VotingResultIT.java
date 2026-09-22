@@ -31,7 +31,7 @@ class VotingResultIT extends AbstractIntegrationTest {
 
         vote(agendaId, "12345678909", "YES");
         vote(agendaId, "98765432100", "YES");
-        vote(agendaId, "11122233344", "NO");
+        vote(agendaId, "11122233396", "NO");
 
         client.get()
                 .uri("/api/v1/agendas/{id}/result", agendaId)
