@@ -151,3 +151,12 @@ Content-Type: application/json
   "cpf": "11122233344",
   "choice": "YES"
 }
+
+### [Passo 6] Resultado da pauta -> 200 (contagem parcial com status OPEN; outcome só quando CLOSED)
+GET {{baseUrl}}/api/v1/agendas/{{agendaId}}/result
+
+### [Passo 6] Resultado de pauta sem sessão -> 200 com status NOT_OPENED
+GET {{baseUrl}}/api/v1/agendas/{{createAgendaNoSession.response.body.id}}/result
+
+### [Passo 6] Resultado de pauta inexistente -> 404
+GET {{baseUrl}}/api/v1/agendas/00000000-0000-0000-0000-000000000000/result

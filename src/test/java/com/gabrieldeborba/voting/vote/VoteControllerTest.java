@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,6 +33,9 @@ class VoteControllerTest {
 
     @MockitoBean
     private VoteService service;
+
+    @MockitoBean
+    private VotingResultService resultService;
 
     @Test
     void castVoteReturns201WithoutEchoingCpf() throws Exception {
@@ -102,5 +106,33 @@ class VoteControllerTest {
                         .content("{\"cpf\":\"12345678909\",\"choice\":\"NO\"}"))
                 .andExpect(status().isUnprocessableContent())
                 .andExpect(jsonPath("$.detail").value("Voting session for agenda " + AGENDA_ID + " closed at " + NOW));
+    }
+
+    @Test
+    void resultOmitsOutcomeWhileSessionIsOpen() throws Exception {
+        when(resultService.result(AGENDA_ID))
+                .thenReturn(new VotingResultResponse(AGENDA_ID, "Budget 2026", VotingStatus.OPEN, 3, 1, 4, null));
+
+        mockMvc.perform(get("/api/v1/agendas/{id}/result", AGENDA_ID))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.agendaId").value(AGENDA_ID.toString()))
+                .andExpect(jsonPath("$.title").value("Budget 2026"))
+                .andExpect(jsonPath("$.status").value("OPEN"))
+                .andExpect(jsonPath("$.yesVotes").value(3))
+                .andExpect(jsonPath("$.noVotes").value(1))
+                .andExpect(jsonPath("$.totalVotes").value(4))
+                .andExpect(jsonPath("$.outcome").doesNotExist());
+    }
+
+    @Test
+    void resultIncludesOutcomeOnceClosed() throws Exception {
+        when(resultService.result(AGENDA_ID))
+                .thenReturn(new VotingResultResponse(
+                        AGENDA_ID, "Budget 2026", VotingStatus.CLOSED, 3, 1, 4, VotingOutcome.APPROVED));
+
+        mockMvc.perform(get("/api/v1/agendas/{id}/result", AGENDA_ID))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("CLOSED"))
+                .andExpect(jsonPath("$.outcome").value("APPROVED"));
     }
 }
