@@ -16,5 +16,21 @@ services:
       timeout: 3s
       retries: 10
 
+  # Only started with `docker compose --profile full up`, so `mvn spring-boot:run` (which starts
+  # the compose file by itself) brings up the database alone.
+  app:
+    build: .
+    container_name: voting-api
+    profiles: ["full"]
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DOCKER_COMPOSE_ENABLED: "false"
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   pgdata:
