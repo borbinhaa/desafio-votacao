@@ -79,3 +79,75 @@ GET {{baseUrl}}/api/v1/agendas/{{agendaId}}/session
 
 ### [Passo 4] Sessão de pauta inexistente -> 404
 GET {{baseUrl}}/api/v1/agendas/00000000-0000-0000-0000-000000000000/session
+
+### [Passo 5] Votar SIM -> 201 (sessão da pauta precisa estar aberta)
+POST {{baseUrl}}/api/v1/agendas/{{agendaId}}/votes
+Content-Type: application/json
+
+{
+  "cpf": "12345678909",
+  "choice": "YES"
+}
+
+### [Passo 5] Mesmo CPF votando de novo -> 409
+POST {{baseUrl}}/api/v1/agendas/{{agendaId}}/votes
+Content-Type: application/json
+
+{
+  "cpf": "12345678909",
+  "choice": "NO"
+}
+
+### [Passo 5] Outro associado vota NÃO -> 201
+POST {{baseUrl}}/api/v1/agendas/{{agendaId}}/votes
+Content-Type: application/json
+
+{
+  "cpf": "98765432100",
+  "choice": "NO"
+}
+
+### [Passo 5] CPF fora do formato -> 400 com errors[]
+POST {{baseUrl}}/api/v1/agendas/{{agendaId}}/votes
+Content-Type: application/json
+
+{
+  "cpf": "123.456.789-09",
+  "choice": "YES"
+}
+
+### [Passo 5] Opção inválida (só YES/NO) -> 400
+POST {{baseUrl}}/api/v1/agendas/{{agendaId}}/votes
+Content-Type: application/json
+
+{
+  "cpf": "11122233344",
+  "choice": "MAYBE"
+}
+
+### [Passo 5] Criar uma pauta sem abrir sessão (para o cenário 422 abaixo)
+# @name createAgendaNoSession
+POST {{baseUrl}}/api/v1/agendas
+Content-Type: application/json
+
+{
+  "title": "Pauta ainda sem sessão"
+}
+
+### [Passo 5] Votar em pauta sem sessão aberta -> 422
+POST {{baseUrl}}/api/v1/agendas/{{createAgendaNoSession.response.body.id}}/votes
+Content-Type: application/json
+
+{
+  "cpf": "11122233344",
+  "choice": "YES"
+}
+
+### [Passo 5] Votar em pauta inexistente -> 404
+POST {{baseUrl}}/api/v1/agendas/00000000-0000-0000-0000-000000000000/votes
+Content-Type: application/json
+
+{
+  "cpf": "11122233344",
+  "choice": "YES"
+}
