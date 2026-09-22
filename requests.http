@@ -178,3 +178,6 @@ Content-Type: application/json
   "cpf": "52998224725",
   "choice": "NO"
 }
+
+### [Passo 8] Resultado após a carga (o id da pauta aparece no log do k6)
+GET {{baseUrl}}/api/v1/agendas/{{agendaId}}/result

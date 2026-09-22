@@ -7,8 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface VoteRepository extends JpaRepository<Vote, UUID> {
 
-    /** Aggregates in the database so the result costs one query regardless of the number of votes. */
-    @Query("select new com.gabrieldeborba.voting.vote.VoteCount(v.choice, count(v)) "
+    /**
+     * Aggregates in the database so the result costs one query regardless of the number of votes.
+     * {@code count(*)} (not {@code count(v)}, which Hibernate renders as {@code count(v.id)}) keeps the
+     * query answerable from the (agenda_id, choice) index alone.
+     */
+    @Query("select new com.gabrieldeborba.voting.vote.VoteCount(v.choice, count(*)) "
             + "from Vote v where v.agenda.id = :agendaId group by v.choice")
     List<VoteCount> countByAgendaIdGroupedByChoice(UUID agendaId);
 }

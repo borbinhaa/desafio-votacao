@@ -6,6 +6,8 @@ spring:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NAME:voting}
     username: ${DB_USER:voting}
     password: ${DB_PASSWORD:voting}
+    hikari:
+      maximum-pool-size: ${DB_POOL_SIZE:20}
 
   jpa:
     open-in-view: false
