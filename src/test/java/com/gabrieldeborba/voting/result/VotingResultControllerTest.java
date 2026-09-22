@@ -57,7 +57,6 @@ class VotingResultControllerTest {
     void resultReturns404WhenAgendaDoesNotExist() throws Exception {
         when(resultService.result(AGENDA_ID)).thenThrow(new AgendaNotFoundException(AGENDA_ID));
 
-        mockMvc.perform(get("/api/v1/agendas/{id}/result", AGENDA_ID))
-                .andExpect(status().isNotFound());
+        mockMvc.perform(get("/api/v1/agendas/{id}/result", AGENDA_ID)).andExpect(status().isNotFound());
     }
 }

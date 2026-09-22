@@ -35,10 +35,34 @@ public class VoteController {
             description = "The member is identified by CPF. The external CPF service (fake in this project) "
                     + "decides at random whether the member may vote.")
     @ApiResponse(responseCode = "201", description = "Vote registered (the CPF is not echoed back)")
-    @ApiResponse(responseCode = "400", description = "Validation failed (CPF format, choice); errors[] lists field and message", content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
-    @ApiResponse(responseCode = "404", description = "Agenda not found, or CPF invalid", content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
-    @ApiResponse(responseCode = "409", description = "Member already voted on this agenda", content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
-    @ApiResponse(responseCode = "422", description = "Session not open / closed, or member unable to vote", content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(
+            responseCode = "400",
+            description = "Validation failed (CPF format, choice); errors[] lists field and message",
+            content =
+                    @Content(
+                            mediaType = "application/problem+json",
+                            schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(
+            responseCode = "404",
+            description = "Agenda not found, or CPF invalid",
+            content =
+                    @Content(
+                            mediaType = "application/problem+json",
+                            schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(
+            responseCode = "409",
+            description = "Member already voted on this agenda",
+            content =
+                    @Content(
+                            mediaType = "application/problem+json",
+                            schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(
+            responseCode = "422",
+            description = "Session not open / closed, or member unable to vote",
+            content =
+                    @Content(
+                            mediaType = "application/problem+json",
+                            schema = @Schema(implementation = ProblemDetail.class)))
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public VoteResponse castVote(@PathVariable UUID agendaId, @Valid @RequestBody VoteRequest request) {

@@ -10,10 +10,10 @@ import static org.mockito.Mockito.when;
 
 import com.gabrieldeborba.voting.agenda.Agenda;
 import com.gabrieldeborba.voting.agenda.AgendaService;
+import com.gabrieldeborba.voting.agenda.exception.AgendaNotFoundException;
 import com.gabrieldeborba.voting.common.cpf.CpfValidationClient;
 import com.gabrieldeborba.voting.common.cpf.CpfValidationStatus;
 import com.gabrieldeborba.voting.common.cpf.exception.InvalidCpfException;
-import com.gabrieldeborba.voting.agenda.exception.AgendaNotFoundException;
 import com.gabrieldeborba.voting.session.VotingSession;
 import com.gabrieldeborba.voting.session.VotingSessionRepository;
 import com.gabrieldeborba.voting.vote.dto.VoteRequest;
@@ -61,7 +61,11 @@ class VoteServiceTest {
     @BeforeEach
     void setUp() {
         service = new VoteService(
-                voteRepository, sessionRepository, agendaService, cpfValidationClient, Clock.fixed(NOW, ZoneOffset.UTC));
+                voteRepository,
+                sessionRepository,
+                agendaService,
+                cpfValidationClient,
+                Clock.fixed(NOW, ZoneOffset.UTC));
         agenda = new Agenda("Budget 2026", null, NOW);
         ReflectionTestUtils.setField(agenda, "id", AGENDA_ID);
     }
@@ -122,7 +126,8 @@ class VoteServiceTest {
         VotingSession closingNow = new VotingSession(agenda, NOW.minusSeconds(60), NOW);
         when(sessionRepository.findByAgendaId(AGENDA_ID)).thenReturn(Optional.of(closingNow));
 
-        assertThatThrownBy(() -> service.castVote(AGENDA_ID, YES_VOTE)).isInstanceOf(VotingSessionClosedException.class);
+        assertThatThrownBy(() -> service.castVote(AGENDA_ID, YES_VOTE))
+                .isInstanceOf(VotingSessionClosedException.class);
     }
 
     @Test
@@ -148,7 +153,8 @@ class VoteServiceTest {
     void castVoteTranslatesUniqueViolationInto409() {
         when(sessionRepository.findByAgendaId(AGENDA_ID)).thenReturn(Optional.of(openSession()));
         when(cpfValidationClient.validate("12345678909")).thenReturn(CpfValidationStatus.ABLE_TO_VOTE);
-        when(voteRepository.saveAndFlush(any(Vote.class))).thenThrow(new DataIntegrityViolationException("duplicate key"));
+        when(voteRepository.saveAndFlush(any(Vote.class)))
+                .thenThrow(new DataIntegrityViolationException("duplicate key"));
 
         assertThatThrownBy(() -> service.castVote(AGENDA_ID, YES_VOTE))
                 .isInstanceOf(MemberAlreadyVotedException.class)

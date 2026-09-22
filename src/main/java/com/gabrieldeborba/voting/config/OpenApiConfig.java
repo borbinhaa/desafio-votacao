@@ -11,12 +11,7 @@ public class OpenApiConfig {
 
     @Bean
     public OpenAPI votingApi() {
-        return new OpenAPI()
-                .info(new Info()
-                        .title("Voting API")
-                        .version("v1")
-                        .description(
-                                """
+        return new OpenAPI().info(new Info().title("Voting API").version("v1").description("""
                                 REST API for cooperative assembly voting: register agendas, open a timed voting \
                                 session, receive one YES/NO vote per member (identified by CPF) and read the tally.
 

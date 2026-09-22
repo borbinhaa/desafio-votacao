@@ -40,19 +40,46 @@ public class VotingSessionController {
             description = "Body is optional: without durationMinutes the session stays open for 1 minute. "
                     + "Each agenda has exactly one session; it closes by itself when closesAt is reached.")
     @ApiResponse(responseCode = "201", description = "Session opened")
-    @ApiResponse(responseCode = "400", description = "durationMinutes out of range (1..1440); errors[] lists field and message", content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
-    @ApiResponse(responseCode = "404", description = "Agenda not found", content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
-    @ApiResponse(responseCode = "409", description = "Agenda already has a session", content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(
+            responseCode = "400",
+            description = "durationMinutes out of range (1..1440); errors[] lists field and message",
+            content =
+                    @Content(
+                            mediaType = "application/problem+json",
+                            schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(
+            responseCode = "404",
+            description = "Agenda not found",
+            content =
+                    @Content(
+                            mediaType = "application/problem+json",
+                            schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(
+            responseCode = "409",
+            description = "Agenda already has a session",
+            content =
+                    @Content(
+                            mediaType = "application/problem+json",
+                            schema = @Schema(implementation = ProblemDetail.class)))
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public VotingSessionResponse open(
-            @PathVariable UUID agendaId, @Valid @RequestBody(required = false) @Nullable OpenVotingSessionRequest request) {
+            @PathVariable UUID agendaId,
+            @Valid @RequestBody(required = false) @Nullable OpenVotingSessionRequest request) {
         return service.open(agendaId, request == null ? DEFAULT_REQUEST : request);
     }
 
-    @Operation(summary = "Get the session of an agenda", description = "status is OPEN or CLOSED, derived from closesAt")
+    @Operation(
+            summary = "Get the session of an agenda",
+            description = "status is OPEN or CLOSED, derived from closesAt")
     @ApiResponse(responseCode = "200", description = "Session found")
-    @ApiResponse(responseCode = "404", description = "Agenda not found, or agenda has no session", content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(
+            responseCode = "404",
+            description = "Agenda not found, or agenda has no session",
+            content =
+                    @Content(
+                            mediaType = "application/problem+json",
+                            schema = @Schema(implementation = ProblemDetail.class)))
     @GetMapping
     public VotingSessionResponse find(@PathVariable UUID agendaId) {
         return service.findByAgendaId(agendaId);

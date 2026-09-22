@@ -14,8 +14,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class FakeCpfValidationClientTest {
 
-    private final FakeCpfValidationClient client =
-            new FakeCpfValidationClient(Validation.buildDefaultValidatorFactory().getValidator());
+    private final FakeCpfValidationClient client = new FakeCpfValidationClient(
+            Validation.buildDefaultValidatorFactory().getValidator());
 
     @ParameterizedTest
     @ValueSource(strings = {"12345678909", "98765432100", "11122233396", "52998224725", "00000000191"})
@@ -34,6 +34,7 @@ class FakeCpfValidationClientTest {
         var seen = EnumSet.noneOf(CpfValidationStatus.class);
         IntStream.range(0, 200).forEach(i -> seen.add(client.validate("12345678909")));
 
-        assertThat(seen).containsExactlyInAnyOrder(CpfValidationStatus.ABLE_TO_VOTE, CpfValidationStatus.UNABLE_TO_VOTE);
+        assertThat(seen)
+                .containsExactlyInAnyOrder(CpfValidationStatus.ABLE_TO_VOTE, CpfValidationStatus.UNABLE_TO_VOTE);
     }
 }

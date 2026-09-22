@@ -31,7 +31,13 @@ public class VotingResultController {
             description = "Counts are always returned. outcome (APPROVED, REJECTED, TIED) is present only "
                     + "when status is CLOSED; status is NOT_OPENED, OPEN or CLOSED.")
     @ApiResponse(responseCode = "200", description = "Tally")
-    @ApiResponse(responseCode = "404", description = "Agenda not found", content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(
+            responseCode = "404",
+            description = "Agenda not found",
+            content =
+                    @Content(
+                            mediaType = "application/problem+json",
+                            schema = @Schema(implementation = ProblemDetail.class)))
     @GetMapping
     public VotingResultResponse result(@PathVariable UUID agendaId) {
         return service.result(agendaId);

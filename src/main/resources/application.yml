@@ -24,6 +24,9 @@ spring:
       enabled: ${DOCKER_COMPOSE_ENABLED:true}
       lifecycle-management: start-only
 
+server:
+  shutdown: graceful # finish in-flight requests on SIGTERM (docker compose stop)
+
 management:
   endpoints:
     web:

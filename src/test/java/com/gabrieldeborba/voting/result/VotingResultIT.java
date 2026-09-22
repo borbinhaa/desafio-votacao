@@ -26,7 +26,8 @@ class VotingResultIT extends AbstractIntegrationTest {
     @Test
     void countsVotesCastThroughTheApi() {
         Agenda agenda = agendaRepository.save(new Agenda("Result test", null, Instant.now()));
-        sessionRepository.save(new VotingSession(agenda, Instant.now(), Instant.now().plusSeconds(600)));
+        sessionRepository.save(
+                new VotingSession(agenda, Instant.now(), Instant.now().plusSeconds(600)));
         UUID agendaId = agenda.getId();
 
         vote(agendaId, "12345678909", "YES");
@@ -56,7 +57,8 @@ class VotingResultIT extends AbstractIntegrationTest {
     @Test
     void reportsOutcomeForClosedSession() {
         Agenda agenda = agendaRepository.save(new Agenda("Closed result", null, Instant.now()));
-        sessionRepository.save(new VotingSession(agenda, Instant.now().minusSeconds(120), Instant.now().minusSeconds(60)));
+        sessionRepository.save(new VotingSession(
+                agenda, Instant.now().minusSeconds(120), Instant.now().minusSeconds(60)));
 
         client.get()
                 .uri("/api/v1/agendas/{id}/result", agenda.getId())

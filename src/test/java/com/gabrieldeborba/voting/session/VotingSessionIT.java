@@ -97,6 +97,8 @@ class VotingSessionIT extends AbstractIntegrationTest {
     }
 
     private UUID createAgenda() {
-        return agendaRepository.save(new Agenda("Session test", null, Instant.now())).getId();
+        return agendaRepository
+                .save(new Agenda("Session test", null, Instant.now()))
+                .getId();
     }
 }

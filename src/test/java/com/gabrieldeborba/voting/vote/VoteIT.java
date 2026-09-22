@@ -116,7 +116,9 @@ class VoteIT extends AbstractIntegrationTest {
 
     @Test
     void rejectsVoteWhenAgendaHasNoSession() {
-        UUID agendaId = agendaRepository.save(new Agenda("No session", null, Instant.now())).getId();
+        UUID agendaId = agendaRepository
+                .save(new Agenda("No session", null, Instant.now()))
+                .getId();
 
         client.post()
                 .uri("/api/v1/agendas/{id}/votes", agendaId)

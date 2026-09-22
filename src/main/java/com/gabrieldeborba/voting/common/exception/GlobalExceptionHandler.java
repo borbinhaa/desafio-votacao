@@ -61,10 +61,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex,
-            HttpHeaders headers,
-            HttpStatusCode status,
-            WebRequest request) {
+            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         List<ValidationError> errors = ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> new ValidationError(error.getField(), error.getDefaultMessage()))
                 .toList();
@@ -75,10 +72,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleHandlerMethodValidationException(
-            HandlerMethodValidationException ex,
-            HttpHeaders headers,
-            HttpStatusCode status,
-            WebRequest request) {
+            HandlerMethodValidationException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         List<ValidationError> errors = ex.getParameterValidationResults().stream()
                 .flatMap(result -> result.getResolvableErrors().stream()
                         .map(error -> new ValidationError(
@@ -93,7 +87,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleTypeMismatch(
             TypeMismatchException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         String field = ex instanceof MethodArgumentTypeMismatchException mismatch ? mismatch.getName() : "unknown";
-        String expectedType = ex.getRequiredType() == null ? "value" : ex.getRequiredType().getSimpleName();
+        String expectedType =
+                ex.getRequiredType() == null ? "value" : ex.getRequiredType().getSimpleName();
         ProblemDetail problem = problem(HttpStatus.BAD_REQUEST, "Validation failed");
         problem.setProperty("errors", List.of(new ValidationError(field, "must be a valid " + expectedType)));
         return handleExceptionInternal(ex, problem, headers, HttpStatus.BAD_REQUEST, request);
@@ -101,10 +96,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(
-            HttpMessageNotReadableException ex,
-            HttpHeaders headers,
-            HttpStatusCode status,
-            WebRequest request) {
+            HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         ProblemDetail problem = problem(HttpStatus.BAD_REQUEST, "Malformed request body");
         return handleExceptionInternal(ex, problem, headers, HttpStatus.BAD_REQUEST, request);
     }
@@ -112,19 +104,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleNoResourceFoundException(
             NoResourceFoundException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        ProblemDetail problem = problem(
-                HttpStatus.NOT_FOUND, "No endpoint for " + ex.getHttpMethod() + " /" + ex.getResourcePath());
+        ProblemDetail problem =
+                problem(HttpStatus.NOT_FOUND, "No endpoint for " + ex.getHttpMethod() + " /" + ex.getResourcePath());
         return handleExceptionInternal(ex, problem, headers, HttpStatus.NOT_FOUND, request);
     }
 
     /** Adds the timestamp to problems built by the parent class (unknown route, wrong method...). */
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(
-            Exception ex,
-            @Nullable Object body,
-            HttpHeaders headers,
-            HttpStatusCode statusCode,
-            WebRequest request) {
+            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
         ResponseEntity<Object> response = super.handleExceptionInternal(ex, body, headers, statusCode, request);
         if (response.getBody() instanceof ProblemDetail problem && !hasTimestamp(problem)) {
             problem.setProperty(TIMESTAMP_PROPERTY, Instant.now());

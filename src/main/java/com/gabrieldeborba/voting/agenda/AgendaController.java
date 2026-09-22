@@ -41,7 +41,13 @@ public class AgendaController {
 
     @Operation(summary = "Register a new agenda")
     @ApiResponse(responseCode = "201", description = "Agenda created; Location header points to it")
-    @ApiResponse(responseCode = "400", description = "Validation failed; errors[] lists field and message", content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(
+            responseCode = "400",
+            description = "Validation failed; errors[] lists field and message",
+            content =
+                    @Content(
+                            mediaType = "application/problem+json",
+                            schema = @Schema(implementation = ProblemDetail.class)))
     @PostMapping
     public ResponseEntity<AgendaResponse> create(@Valid @RequestBody CreateAgendaRequest request) {
         AgendaResponse agenda = service.create(request);
@@ -54,7 +60,13 @@ public class AgendaController {
 
     @Operation(summary = "Get an agenda by id")
     @ApiResponse(responseCode = "200", description = "Agenda found")
-    @ApiResponse(responseCode = "404", description = "Agenda not found", content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(
+            responseCode = "404",
+            description = "Agenda not found",
+            content =
+                    @Content(
+                            mediaType = "application/problem+json",
+                            schema = @Schema(implementation = ProblemDetail.class)))
     @GetMapping("/{id}")
     public AgendaResponse findById(@PathVariable UUID id) {
         return service.findById(id);
@@ -66,7 +78,13 @@ public class AgendaController {
      */
     @Operation(summary = "List agendas, newest first", description = "size is capped at 100; page starts at 0")
     @ApiResponse(responseCode = "200", description = "Page of agendas")
-    @ApiResponse(responseCode = "400", description = "page or size out of range; errors[] lists field and message", content = @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(
+            responseCode = "400",
+            description = "page or size out of range; errors[] lists field and message",
+            content =
+                    @Content(
+                            mediaType = "application/problem+json",
+                            schema = @Schema(implementation = ProblemDetail.class)))
     @GetMapping
     public PagedModel<AgendaResponse> findAll(
             @RequestParam(defaultValue = "0") @Min(0) int page,

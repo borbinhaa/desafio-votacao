@@ -24,7 +24,10 @@ import org.jspecify.annotations.Nullable;
 @Entity
 @Table(
         name = "vote",
-        uniqueConstraints = @UniqueConstraint(name = "uk_vote_agenda_member", columnNames = {"agenda_id", "member_cpf"}))
+        uniqueConstraints =
+                @UniqueConstraint(
+                        name = "uk_vote_agenda_member",
+                        columnNames = {"agenda_id", "member_cpf"}))
 public class Vote {
 
     @Id

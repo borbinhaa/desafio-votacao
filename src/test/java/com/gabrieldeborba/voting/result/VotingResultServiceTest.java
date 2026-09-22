@@ -102,7 +102,8 @@ class VotingResultServiceTest {
     @Test
     void missingChoiceInAggregateCountsAsZero() {
         when(sessionRepository.findByAgendaId(AGENDA_ID)).thenReturn(Optional.of(session(NOW.minusSeconds(1))));
-        when(voteRepository.countByAgendaIdGroupedByChoice(AGENDA_ID)).thenReturn(List.of(new VoteCount(VoteChoice.NO, 2)));
+        when(voteRepository.countByAgendaIdGroupedByChoice(AGENDA_ID))
+                .thenReturn(List.of(new VoteCount(VoteChoice.NO, 2)));
 
         VotingResultResponse result = service.result(AGENDA_ID);
 

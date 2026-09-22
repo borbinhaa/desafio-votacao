@@ -9,9 +9,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.gabrieldeborba.voting.common.cpf.exception.InvalidCpfException;
 import com.gabrieldeborba.voting.vote.dto.VoteRequest;
 import com.gabrieldeborba.voting.vote.dto.VoteResponse;
-import com.gabrieldeborba.voting.common.cpf.exception.InvalidCpfException;
 import com.gabrieldeborba.voting.vote.exception.MemberAlreadyVotedException;
 import com.gabrieldeborba.voting.vote.exception.MemberUnableToVoteException;
 import com.gabrieldeborba.voting.vote.exception.VotingSessionClosedException;
@@ -89,8 +89,7 @@ class VoteControllerTest {
 
     @Test
     void castVoteReturns409WhenMemberAlreadyVoted() throws Exception {
-        when(service.castVote(eq(AGENDA_ID), any()))
-                .thenThrow(new MemberAlreadyVotedException(AGENDA_ID));
+        when(service.castVote(eq(AGENDA_ID), any())).thenThrow(new MemberAlreadyVotedException(AGENDA_ID));
 
         mockMvc.perform(post("/api/v1/agendas/{id}/votes", AGENDA_ID)
                         .contentType(MediaType.APPLICATION_JSON)

@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.gabrieldeborba.voting.agenda.Agenda;
 import com.gabrieldeborba.voting.session.dto.OpenVotingSessionRequest;
 import com.gabrieldeborba.voting.session.dto.VotingSessionResponse;
 import com.gabrieldeborba.voting.session.exception.VotingSessionAlreadyOpenException;
@@ -81,7 +80,8 @@ class VotingSessionControllerTest {
 
     @Test
     void openReturns409WhenSessionAlreadyExists() throws Exception {
-        when(service.open(eq(AGENDA_ID), any())).thenThrow(new VotingSessionAlreadyOpenException(AGENDA_ID, new RuntimeException("duplicate key")));
+        when(service.open(eq(AGENDA_ID), any()))
+                .thenThrow(new VotingSessionAlreadyOpenException(AGENDA_ID, new RuntimeException("duplicate key")));
 
         mockMvc.perform(post("/api/v1/agendas/{id}/session", AGENDA_ID))
                 .andExpect(status().isConflict())
@@ -101,7 +101,6 @@ class VotingSessionControllerTest {
     void findReturns404WhenNoSession() throws Exception {
         when(service.findByAgendaId(AGENDA_ID)).thenThrow(new VotingSessionNotFoundException(AGENDA_ID));
 
-        mockMvc.perform(get("/api/v1/agendas/{id}/session", AGENDA_ID))
-                .andExpect(status().isNotFound());
+        mockMvc.perform(get("/api/v1/agendas/{id}/session", AGENDA_ID)).andExpect(status().isNotFound());
     }
 }

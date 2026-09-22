@@ -35,10 +35,8 @@ public class VotingResultService {
     @Transactional(readOnly = true)
     public VotingResultResponse result(UUID agendaId) {
         Agenda agenda = agendaService.getAgenda(agendaId);
-        VotingStatus status = sessionRepository
-                .findByAgendaId(agendaId)
-                .map(this::statusOf)
-                .orElse(VotingStatus.NOT_OPENED);
+        VotingStatus status =
+                sessionRepository.findByAgendaId(agendaId).map(this::statusOf).orElse(VotingStatus.NOT_OPENED);
 
         long yes = 0;
         long no = 0;

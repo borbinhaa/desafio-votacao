@@ -9,8 +9,6 @@ import org.springframework.http.HttpStatus;
 public class VotingSessionClosedException extends DomainException {
 
     public VotingSessionClosedException(UUID agendaId, Instant closedAt) {
-        super(
-                HttpStatus.UNPROCESSABLE_CONTENT,
-                "Voting session for agenda " + agendaId + " closed at " + closedAt);
+        super(HttpStatus.UNPROCESSABLE_CONTENT, "Voting session for agenda " + agendaId + " closed at " + closedAt);
     }
 }
